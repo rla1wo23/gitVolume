@@ -1,0 +1,34 @@
+usr/share/nginx/html
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  volumes:
+  - name: html
+    gitRepo:
+      repository: https://github.com/rla1wo23/gitVolume.git
+      revision: main
+      directory: .
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html
+          readOnly: true
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: <Port>
